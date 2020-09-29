@@ -50,6 +50,8 @@ export class Encoder<ContextType> {
       this.encodeNumber(object);
     } else if (typeof object === "string") {
       this.encodeString(object);
+    } else if (typeof object === "bigint") {
+      this.encodebigint(object);
     } else {
       this.encodeObject(object, depth);
     }
@@ -140,6 +142,62 @@ export class Encoder<ContextType> {
         // float 64
         this.writeU8(0xcb);
         this.writeF64(object);
+      }
+    }
+  }
+
+  private encodebigint(object: bigint) {
+    if (object >= BigInt(0)) {
+      if (object < BigInt(0x80)) {
+        // positive fixint
+        this.writeU8(Number(object));
+      } else if (object < BigInt(0x100)) {
+        // uint 8
+        this.writeU8(0xcc);
+        this.writeU8(Number(object));
+      } else if (object < BigInt(0x10000)) {
+        // uint 16
+        this.writeU8(0xcd);
+        this.writeU16(Number(object));
+      } else if (object < BigInt(0x100000000)) {
+        // uint 32
+        this.writeU8(0xce);
+        this.writeU32(Number(object));
+      } else {
+        // uint 64
+        this.writeU8(0xcf);
+        this.writeU64(Number(object));
+        // @ts-ignore
+        const high = object / 0x1_0000_0000n;
+        const low = object;
+        this.writeU32(Number(high))
+        this.writeU32(Number(low))
+      }
+    } else {
+      if (object >= BigInt(-0x20)) {
+        // nagative fixint
+        this.writeU8(0xe0 | (Number(object) + 0x20));
+      } else if (object >= BigInt(-0x80)) {
+        // int 8
+        this.writeU8(0xd0);
+        this.writeI8(Number(object));
+      } else if (object >= BigInt(-0x8000)) {
+        // int 16
+        this.writeU8(0xd1);
+        this.writeI16(Number(object));
+      } else if (object >= BigInt(-0x80000000)) {
+        // int 32
+        this.writeU8(0xd2);
+        this.writeI32(Number(object));
+      } else {
+        // int 64
+        this.writeU8(0xd3);
+        // @ts-ignore
+        const high_unfloored = object / 0x1_0000_0000n;
+        const high = Math.floor(Number(high_unfloored));
+        const low = Number(object);
+        this.writeI32(high);
+        this.writeI32(low);
       }
     }
   }
