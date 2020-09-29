@@ -78,7 +78,7 @@
     "prettier": "latest",
     "rimraf": "latest",
     "ts-loader": "latest",
-    "ts-node": "latest",
+    "ts-node": "^9.0.0",
     "tsconfig-paths": "latest",
     "typescript": "latest",
     "web-streams-polyfill": "latest",

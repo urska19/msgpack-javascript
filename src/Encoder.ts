@@ -167,8 +167,7 @@ export class Encoder<ContextType> {
         // uint 64
         this.writeU8(0xcf);
         this.writeU64(Number(object));
-        // @ts-ignore
-        const high = object / 0x1_0000_0000n;
+        const high = object / BigInt(0x1_0000_0000);
         const low = object;
         this.writeU32(Number(high))
         this.writeU32(Number(low))
@@ -192,8 +191,7 @@ export class Encoder<ContextType> {
       } else {
         // int 64
         this.writeU8(0xd3);
-        // @ts-ignore
-        const high_unfloored = object / 0x1_0000_0000n;
+        const high_unfloored = object / BigInt(0x1_0000_0000);
         const high = Math.floor(Number(high_unfloored));
         const low = Number(object);
         this.writeI32(high);
