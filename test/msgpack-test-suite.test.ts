@@ -1,8 +1,14 @@
 import assert from "assert";
 import util from "util";
-import { Exam } from "msgpack-test-js";
+import { Exam, Type } from "msgpack-test-js";
 import { MsgTimestamp } from "msg-timestamp";
 import { encode, decode, ExtensionCodec, EXT_TIMESTAMP, encodeTimeSpecToTimestamp } from "@msgpack/msgpack";
+
+if (typeof BigInt !== "undefined") {
+  Type.getType("bignum").parse = function parseBigInt(str: string) {
+    return BigInt(str);
+  } as any;
+}
 
 const extensionCodec = new ExtensionCodec();
 extensionCodec.register({
@@ -24,7 +30,7 @@ extensionCodec.register({
 
 const TEST_TYPES = {
   array: 1,
-  bignum: 0, // TODO
+  bignum: typeof BigInt !== "undefined",
   binary: 1,
   bool: 1,
   map: 1,
