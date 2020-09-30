@@ -166,7 +166,6 @@ export class Encoder<ContextType> {
       } else {
         // uint 64
         this.writeU8(0xcf);
-        this.writeU64(Number(object));
         const high = object / BigInt(0x1_0000_0000);
         const low = object;
         this.writeU32(Number(high))
