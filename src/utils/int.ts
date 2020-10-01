@@ -18,7 +18,7 @@ export function setInt64(view: DataView, offset: number, value: number): void {
 export function getInt64(view: DataView, offset: number) {
   const high = view.getInt32(offset);
   const low = view.getUint32(offset + 4);
-  if ((high > (Number.MAX_SAFE_INTEGER >> 32)) || (high < (Number.MIN_SAFE_INTEGER >>> 32))) {
+  if ((high > (Number.MAX_SAFE_INTEGER / 0x1_0000_0000)) || (high < (Number.MIN_SAFE_INTEGER / 0x1_0000_0000))) {
     return BigInt(high) * BigInt(0x1_0000_0000) + BigInt(low);
   }
   return high * 0x1_0000_0000 + low
@@ -27,11 +27,11 @@ export function getInt64(view: DataView, offset: number) {
 export function getUint64(view: DataView, offset: number) {
   const high = view.getUint32(offset);
   const low = view.getUint32(offset + 4);
-  if ((high) > (Number.MAX_SAFE_INTEGER >>> 31)) {
+  if ((high) > (Number.MAX_SAFE_INTEGER / 0x1_0000_0000)) {
     console.log("high:");
     console.log(high);
     console.log("bit shift: ");
-    console.log(Number.MAX_SAFE_INTEGER >>> 31);
+    console.log(Number.MAX_SAFE_INTEGER / 0x1_0000_0000);
     console.log("math result: ");
     console.log(BigInt(high) * BigInt(0x1_0000_0000) + BigInt(low));
     return BigInt(high) * BigInt(0x1_0000_0000) + BigInt(low);
