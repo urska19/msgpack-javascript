@@ -1,6 +1,6 @@
 import { utf8EncodeJs, utf8Count, TEXT_ENCODING_AVAILABLE, TEXT_ENCODER_THRESHOLD, utf8EncodeTE } from "./utils/utf8";
 import { ExtensionCodec, ExtensionCodecType } from "./ExtensionCodec";
-import { setInt64, setUint64 } from "./utils/int";
+import { setInt64, setUint64, setBigInt64 } from "./utils/int";
 import { ensureUint8Array } from "./utils/typedArrays";
 import { ExtData } from "./ExtData";
 
@@ -166,10 +166,7 @@ export class Encoder<ContextType> {
       } else {
         // uint 64
         this.writeU8(0xcf);
-        const high = object / BigInt(0x1_0000_0000);
-        const low = object;
-        this.writeU32(Number(high))
-        this.writeU32(Number(low))
+        this.writeBig64(object);
       }
     } else {
       if (object >= BigInt(-0x20)) {
@@ -190,11 +187,7 @@ export class Encoder<ContextType> {
       } else {
         // int 64
         this.writeU8(0xd3);
-        const high_unfloored = object / BigInt(0x1_0000_0000);
-        const high = Math.floor(Number(high_unfloored));
-        const low = Number(object);
-        this.writeI32(high);
-        this.writeI32(low);
+        this.writeBig64(object);
       }
     }
   }
@@ -452,6 +445,13 @@ export class Encoder<ContextType> {
     this.ensureBufferSizeToWrite(8);
 
     setInt64(this.view, this.pos, value);
+    this.pos += 8;
+  }
+
+  private writeBig64(value: bigint) {
+    this.ensureBufferSizeToWrite(8);
+
+    setBigInt64(this.view, this.pos, value);
     this.pos += 8;
   }
 }
