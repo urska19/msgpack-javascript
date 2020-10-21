@@ -35,7 +35,7 @@
   "homepage": "https://msgpack.org/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/msgpack/msgpack-javascript.git"
+    "url": "https://github.com/EvanJRichard/msgpack-javascript.git"
   },
   "bugs": {
     "url": "https://github.com/msgpack/msgpack-javascript/issues"
