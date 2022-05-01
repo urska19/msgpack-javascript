@@ -45,6 +45,7 @@ export const defaultDecodeOptions: DecodeOptions = {};
 export function decode<ContextType>(
   buffer: ArrayLike<number> | ArrayBuffer,
   options: DecodeOptions<SplitUndefined<ContextType>> = defaultDecodeOptions as any,
+  multi?: boolean,
 ): unknown {
   const decoder = new Decoder<ContextType>(
     options.extensionCodec,
@@ -55,5 +56,5 @@ export function decode<ContextType>(
     options.maxMapLength,
     options.maxExtLength,
   );
-  return decoder.decode(buffer);
+  return decoder.decode(buffer, multi);
 }

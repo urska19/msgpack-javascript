@@ -114,9 +114,10 @@ export class Decoder<ContextType> {
     return new RangeError(`Extra ${view.byteLength - pos} of ${view.byteLength} byte(s) found at buffer[${posToShow}]`);
   }
 
-  public decode(buffer: ArrayLike<number> | ArrayBuffer): unknown {
+  public decode(buffer: ArrayLike<number> | ArrayBuffer, multi?: boolean): unknown {
     this.reinitializeState();
     this.setBuffer(buffer);
+    if (multi) return this.doDecodeMultiSync();
     return this.doDecodeSingleSync();
   }
 
@@ -126,6 +127,14 @@ export class Decoder<ContextType> {
       throw this.createNoExtraBytesError(this.pos);
     }
     return object;
+  }
+
+  private doDecodeMultiSync(): unknown[] {
+    const arr = [this.doDecodeSync()];
+    while (this.hasRemaining()) {
+      arr.push(this.doDecodeSync());
+    }
+    return arr;
   }
 
   public async decodeAsync(stream: AsyncIterable<ArrayLike<number>>): Promise<unknown> {
