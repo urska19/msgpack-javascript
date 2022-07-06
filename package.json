@@ -1,6 +1,6 @@
 {
-  "name": "algo-msgpack-with-bigint",
-  "version": "2.1.1",
+  "name": "algo-msgpack-with-bigint-multi",
+  "version": "3.0.0",
   "description": "MessagePack for JavaScript/ECMA-262, with changed behavior for BigInts",
   "author": "The MessagePack community orginally; forked by @EvanJRichard for Algorand",
   "license": "ISC",
@@ -85,7 +85,6 @@
     "webpack": "latest",
     "webpack-cli": "latest"
   },
-  "dependencies": {},
   "files": [
     "src/**/*.*",
     "dist/**/*.*",
