@@ -1,9 +1,5 @@
 import path from "path";
-// @ts-ignore
 import webpack from "webpack";
-// @ts-ignore
-import { CheckEsVersionPlugin } from "@bitjourney/check-es-version-webpack-plugin";
-// @ts-ignore
 import _ from "lodash";
 
 const config = {
@@ -15,6 +11,7 @@ const config = {
     library: "MessagePack",
     libraryTarget: "umd",
     globalObject: "this",
+    filename: "",
   },
   resolve: {
     extensions: [".ts", ".tsx", ".mjs", ".js", ".json", ".wasm"],
@@ -32,9 +29,6 @@ const config = {
   },
 
   plugins: [
-    new CheckEsVersionPlugin({
-      esVersion: 5, // for IE11 support
-    }),
     new webpack.DefinePlugin({
       "process.env.TEXT_ENCODING": "undefined",
       "process.env.TEXT_DECODER": "undefined",
@@ -42,7 +36,7 @@ const config = {
   ],
 
   optimization: {
-    noEmitOnErrors: true,
+    emitOnErrors: true,
     minimize: false,
   },
 
