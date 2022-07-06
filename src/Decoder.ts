@@ -48,7 +48,7 @@ export const DataViewIndexOutOfBoundsError: typeof Error = (() => {
     // IE11: The spec says it should throw RangeError,
     // IE11: but in IE11 it throws TypeError.
     EMPTY_VIEW.getInt8(0);
-  } catch (e) {
+  } catch (e: any) {
     return e.constructor;
   }
   throw new Error("never reached");
@@ -117,7 +117,9 @@ export class Decoder<ContextType> {
   public decode(buffer: ArrayLike<number> | ArrayBuffer, multi?: boolean): unknown {
     this.reinitializeState();
     this.setBuffer(buffer);
-    if (multi) return this.doDecodeMultiSync();
+    if (multi) {
+      return this.doDecodeMultiSync();
+    }
     return this.doDecodeSingleSync();
   }
 
@@ -129,7 +131,7 @@ export class Decoder<ContextType> {
     return object;
   }
 
-  private doDecodeMultiSync(): unknown[] {
+  private doDecodeMultiSync(): Array<unknown> {
     const arr = [this.doDecodeSync()];
     while (this.hasRemaining()) {
       arr.push(this.doDecodeSync());
