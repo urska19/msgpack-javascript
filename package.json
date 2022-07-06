@@ -11,7 +11,7 @@
   "scripts": {
     "build": "npm publish --dry-run",
     "prepare": "npm run clean && tsc -p tsconfig.dist.json && webpack",
-    "prepublishOnly": "",
+    "prepublishOnly": "run-p 'test:dist:*'",
     "clean": "rimraf build dist dist.*",
     "test": "mocha 'test/**/*.test.ts'",
     "test:purejs": "TEXT_ENCODING=never mocha 'test/**/*.test.ts'",
